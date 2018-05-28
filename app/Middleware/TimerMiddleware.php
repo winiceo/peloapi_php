@@ -9,7 +9,7 @@
 namespace App\Middleware;
 
 
-use Core\Interfaces\_Middleware;
+use Leven\Interfaces\_Middleware;
 use Monolog\Logger;
 use Slim\Container;
 

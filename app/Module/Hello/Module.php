@@ -2,12 +2,12 @@
 namespace App\Module\Hello;
 
 
-use Core\App;
-use Core\Interfaces\AbstractModule;
+use Leven\Application;
+use Leven\Interfaces\AbstractModule;
 
 class Module extends AbstractModule
 {
-    public function initRoutes(App $app)
+    public function initRoutes(Application $app)
     {
         $app->get('/hello/{name}', function ($request, $response) {
             return $this->view->render($response, '.index');

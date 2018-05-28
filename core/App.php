@@ -6,7 +6,7 @@
  * Time: 12:55 PM
  */
 
-namespace Core;
+namespace Leven;
 
 
 class App extends \Slim\App

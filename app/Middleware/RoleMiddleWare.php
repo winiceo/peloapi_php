@@ -1,9 +1,9 @@
 <?php
 namespace App\Middleware;
 
-use Core\Facades\Auth;
+use Leven\Facades\Auth;
 
-use Core\Interfaces\_Middleware;
+use Leven\Interfaces\_Middleware;
 
 class RoleMiddleWare extends _Middleware
 {

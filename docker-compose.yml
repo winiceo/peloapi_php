@@ -7,7 +7,7 @@ volumes:
 services:
     slim:
         image: bravist/php-fpm-alpine-aliyun-app:1.16
-        container_name: pelo-slim
+        container_name: leven-slim
         working_dir: /var/www
         command: php -S 0.0.0.0:8080 -t public public/index.php
         environment:
@@ -22,12 +22,12 @@ services:
               - redis
     mariadb:
         image: mariadb:10.3
-        container_name: pelo-mariadb
+        container_name: leven-mariadb
         ports:
           - "3306:3306"
         volumes:
           # NOTE: your data will be stored in ./mysql
-          - ./mariadb/data/mysql:/var/lib/mysql
+          - /share/mariadb/data/mysql:/var/lib/mysql
         environment:
           - MYSQL_DATABASE=mysql
           - MYSQL_USER=root
@@ -38,12 +38,12 @@ services:
 
       ### REDIS Container #######################################
     redis:
-        build: ./redis
-        container_name: pelo-redis
+        build: /share/redis
+        container_name: leven-redis
         ports:
           - "6380:6379"
         volumes:
-          - "./redis/data:/data"
+          - "/share/redis/data:/data"
         environment:
           - REDIS_PASSWORD=root
         networks:

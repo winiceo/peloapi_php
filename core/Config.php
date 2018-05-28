@@ -6,7 +6,7 @@
  * Time: 12:02 PM
  */
 
-namespace Core;
+namespace Leven;
 
 class Config {
 

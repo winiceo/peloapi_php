@@ -102,12 +102,27 @@ $capsule->addConnection($config['settings']['databases']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// monolog
-$container['logger'] = function ($container) {
-    $settings = $container->get('settings')['app']['logger'];
-    $logger = new Monolog\Logger($settings['name']);
-    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
+//// monolog
+//$container['logger'] = function ($container) {
+//    $settings = $container->get('settings')['app']['logger'];
+//    $logger = new Monolog\Logger($settings['name']);
+//    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
+//    $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
+//    return $logger;
+//};
+//
+
+$container['logger'] = function ( $c) {
+    $config = $c->get('settings')['app']['logger'];
+
+    $logger = new Monolog\Logger($config['name']);
+    $file_stream = new  Monolog\Handler\StreamHandler($config['path'] . date("Y-m-d-") . getenv('APP_ENV') . '.log', Monolog\Logger::INFO);
+    $file_stream->setFormatter(new  \Monolog\Formatter\JsonFormatter());
+
+    $logger->pushHandler($file_stream);
+
+    $logger->pushProcessor(new \Monolog\Processor\UidProcessor());
+
     return $logger;
 };
 

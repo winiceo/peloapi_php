@@ -17,10 +17,11 @@ return  [
             '2step' => true
         ],
         'logger' => [
-            'name' => 'cafesaba',
+            'name' => 'app',
             'level' => Monolog\Logger::DEBUG,
-            'path' => __DIR__ . '/../storage/logs/app.log',
+            'path' => __DIR__ . '/../storage/logs/',
         ],
+
         'paging' => [
             'perpage' => '20',
         ],

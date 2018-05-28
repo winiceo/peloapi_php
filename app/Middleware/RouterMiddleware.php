@@ -1,7 +1,7 @@
 <?php
 namespace App\Middleware;
 
-use Core\Interfaces\_Middleware;
+use Leven\Interfaces\_Middleware;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class RouterMiddleware extends _Middleware {
