@@ -1,0 +1,64 @@
+version: '2'
+
+volumes:
+    logs:
+        driver: local
+
+services:
+    slim:
+        image: bravist/php-fpm-alpine-aliyun-app:1.16
+        container_name: pelo-slim
+        working_dir: /var/www
+        command: php -S 0.0.0.0:8080 -t public public/index.php
+        environment:
+            docker: "true"
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/var/www
+            - logs:/var/www/logs
+        links:
+              - mariadb
+              - redis
+    mariadb:
+        image: mariadb:10.3
+        container_name: pelo-mariadb
+        ports:
+          - "3306:3306"
+        volumes:
+          # NOTE: your data will be stored in ./mysql
+          - ./mariadb/data/mysql:/var/lib/mysql
+        environment:
+          - MYSQL_DATABASE=mysql
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=root
+          - MYSQL_ROOT_PASSWORD=root
+        networks:
+          - web_server_network
+
+      ### REDIS Container #######################################
+    redis:
+        build: ./redis
+        container_name: pelo-redis
+        ports:
+          - "6380:6379"
+        volumes:
+          - "./redis/data:/data"
+        environment:
+          - REDIS_PASSWORD=root
+        networks:
+          - web_server_network
+
+#networks:
+#    net-php:
+#    net-mysql:
+#    net-redis:
+### Networks Setup ############################################
+networks:
+    web_server_network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+              - subnet: "${WEB_SERVER_SUBNET}"
+                gateway: "${WEB_SERVER_GATEWAY}"
