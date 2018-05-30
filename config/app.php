@@ -10,7 +10,7 @@ return  [
             'dir' =>  __APP_ROOT__ . 'public/uploads'
         ],
         'translation' => [
-            'default_lang' => 'en',
+            'default_lang' => 'zh',
             'translations_path' => __APP_ROOT__ . 'translations/',
         ],
         'auth' => [

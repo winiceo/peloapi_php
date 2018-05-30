@@ -7,7 +7,7 @@ use Slim\Handlers\PhpError;
 use Slim\Handlers\Strategies\RequestResponse;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Controller functions signature must be like:
@@ -18,18 +18,18 @@ use Interop\Container\ContainerInterface;
  */
 
 
-$container = [];
+
 //$container['foundHandler'] = function (ContainerInterface $c) {
 //    /** @var Request $request */
 //    $request = $c->get('request');
-//    $c->get('monolog')->info(sprintf('Matched route "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
+//    $c->get('logger')->info(sprintf('Matched route "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
 //
 //     return new RequestResponse();
 //};
 
 $container['csrfFailureHandler'] = function (ContainerInterface $c) {
     return function (Request $request, Response $response) use ($c) {
-        $c->get('monolog')->error(sprintf('Failed CSRF check on "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
+        $c->get('logger')->error(sprintf('Failed CSRF check on "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
 
         $c->get('flash')->addMessage('error', 'Failed CSRF check');
 
@@ -44,7 +44,7 @@ $container['csrfFailureHandler'] = function (ContainerInterface $c) {
 
 $container['notFoundHandler'] = function (ContainerInterface $c) {
     return function (Request $request, Response $response) use ($c) {
-        $c->get('monolog')->error(sprintf('No route found for "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
+        $c->get('logger')->error(sprintf('No route found for "%s /%s"', $request->getMethod(), ltrim($request->getUri()->getPath(), '/')));
 
         if ($request->getContentType() == 'application/json') {
             return $response->withJson(["status" => 404, "message" => 'ÇëÇóµØÖ·´íÎó'], 404);
@@ -65,7 +65,7 @@ $container['notFoundHandler'] = function (ContainerInterface $c) {
 
 $container['notAllowedHandler'] = function (ContainerInterface $c) {
     return function (Request $request, Response $response, array $methods) use ($c) {
-        $c->get('monolog')->error(sprintf(
+        $c->get('logger')->error(sprintf(
             'No route found for "%s /%s": Method not allowed (Allow: %s)',
             $request->getMethod(),
             ltrim($request->getUri()->getPath(), '/'),
@@ -82,7 +82,7 @@ $container['notAllowedHandler'] = function (ContainerInterface $c) {
 
 $container['accessDeniedHandler'] = function (ContainerInterface $c) {
     return function (Request $request, Response $response, AccessDeniedException $exception) use ($c) {
-        $c->get('monolog')->debug('Access denied, the user does not have access to this section', [
+        $c->get('logger')->debug('Access denied, the user does not have access to this section', [
             'exception' => $exception
         ]);
 
@@ -92,11 +92,14 @@ $container['accessDeniedHandler'] = function (ContainerInterface $c) {
 
 $container['errorHandler'] = function (ContainerInterface $c) {
     return function (Request $request, Response $response, Exception $exception) use ($c) {
+
+
+
         if ($exception instanceof AccessDeniedException) {
             return $c->get('accessDeniedHandler')($request, $response, $exception);
         }
 
-        $c->get('monolog')->error('Uncaught PHP Exception ' . get_class($exception), [
+        $c->get('logger')->error('Uncaught PHP Exception ' . get_class($exception), [
             'exception' => $exception
         ]);
 
@@ -115,8 +118,10 @@ $container['errorHandler'] = function (ContainerInterface $c) {
 };
 
 $container['phpErrorHandler'] = function (ContainerInterface $c) {
+
+
     return function (Request $request, Response $response, Throwable $error) use ($c) {
-        $c->get('monolog')->critical('Uncaught PHP Exception ' . get_class($error), [
+        $c->get('logger')->critical('Uncaught PHP Exception ' . get_class($error), [
             'exception' => $error
         ]);
 

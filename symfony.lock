@@ -1,4 +1,7 @@
 {
+    "awurth/slim-validation": {
+        "version": "3.0.2"
+    },
     "cartalyst/sentinel": {
         "version": "v2.0.17"
     },
@@ -52,6 +55,15 @@
     },
     "doctrine/orm": {
         "version": "v2.6.1"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.3.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.4.2"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -199,6 +211,9 @@
             "version": "1.0",
             "ref": "0e8ef1deeaef761e1defbec0be694237660ab13a"
         }
+    },
+    "yunpian/yunpian-php-sdk": {
+        "version": "1.0.2"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"

@@ -7,9 +7,12 @@
 
 namespace Leven\Facades;
 
-use Leven\Services\AuthService;
-use SlimFacades\Facade;
-
+/**
+ * Class View
+ * If you want to use this facades, you should set a 'view' service in the
+ * container.
+ * @package Leven
+ */
 class Config extends Facade
 {
     protected static function getFacadeAccessor()

@@ -4,12 +4,12 @@ return [
 
 
     'api.user'  => 'App\Controller\Api\UserController',
-    'api.advert'  => 'App\Controller\Api\AdvertController',
-    'api.order'  => 'App\Controller\Api\OrderController',
-    'api.im'  => 'App\Controller\Api\ImController',
+    'api.timeline'  => 'App\Controller\Api\TimelineController',
+    'api.balance'  => 'App\Controller\Api\BalanceController',
+    'api.assets'  => 'App\Controller\Api\AssetsController',
     'api.common'  => 'App\Controller\Api\CommonController',
-    'api.wallet'  => 'App\Controller\Api\WalletController',
-    'api.upload'  => 'App\Controller\Api\UploadController',
+    'api.coin'  => 'App\Controller\Api\CoinController',
 
+    'api.upload'  => 'App\Controller\Api\UploadController',
     'api.test'  => 'App\Controller\Api\TestController',
 ];

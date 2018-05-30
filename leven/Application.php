@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Leven;
 
-
+use DI\ContainerBuilder;
 use Slim\App;
 
 class Application extends App
@@ -26,58 +26,52 @@ class Application extends App
      */
     public function __construct($environment)
     {
+
         $this->environment = $environment;
         $this->rootDir = $this->getRootDir();
-        require  $this->rootDir.'/leven/Functions/general_helpers.php';
+        require $this->rootDir . '/leven/Functions/general_helpers.php';
 
+        C('environment', $environment);
+
+
+        $containerBuilder = new ContainerBuilder;
         C('root', $this->rootDir);
         C('templates', $this->rootDir . '/templates');
         C('cache', $this->rootDir . '/var/cache/twig');
         C('environment', $environment);
+        C($this->loadConfiguration());
 
+        $containerBuilder->addDefinitions($this->loadConfiguration());
+        $containerBuilder->addDefinitions($this->getBootstrap() . '/container.php');
+        $containerBuilder->addDefinitions($this->getBootstrap() . '/handlers.php');
+        $containerBuilder->useAnnotations(true);
+        //$container = $containerBuilder->build();
 
-        $configuration = new Configuration();
-        $configuration->setDefinitions($this->loadConfiguration());
-        C($configuration->getDefinitions()["definitions"]);
+        parent::__construct($containerBuilder->build());
 
-        $configuration->setDefinitions($this->getBootstrap() . '/container.php');
+        require $this->rootDir . '/leven/Functions/helpers.php';
 
-
-        parent::__construct(ContainerBuilder::build($configuration));
-
-
-        require  $this->rootDir .'/leven/Functions/helpers.php';
-
-        $container = $this->getContainer();
-
+        $container=$this->getContainer();
         $this->registerControllers($container);
+        //$container->set('app', $this);
 
-        $this->registerHandlers();
+
+        //$//this->registerHandlers($container);
         $this->loadMiddleware();
+
         $this->loadRoutes();
     }
 
-    protected function configureContainer(ContainerBuilder $builder)
-    {
-        $rootDir = $this->rootDir;
-        $container = $this->getContainer();
-
-        //require $this->getConfigurationDir() . '/container.php';
-        $builder->addDefinitions($this->getConfigurationDir() . '/container.php');
-
-    }
-
-
-    public function getCacheDir()
-    {
-        return $this->getRootDir() . '/var/cache/' . $this->environment;
-    }
 
     public function getBootstrap()
     {
         return $this->getRootDir() . '/bootstrap';
     }
 
+    public function getCacheDir()
+    {
+        return $this->getRootDir() . '/var/cache/' . $this->environment;
+    }
 
     public function getConfigurationDir()
     {
@@ -91,7 +85,7 @@ class Application extends App
 
     public function getLogDir()
     {
-        return $this->getRootDir() . '/var/logs';
+        return $this->getRootDir() . '/var/log';
     }
 
     public function getRootDir()
@@ -106,33 +100,35 @@ class Application extends App
 
     protected function loadConfiguration()
     {
+        $app = $this;
 
-        $configuration = [
-            "definitions"=>[
-                "settings"=>[]
-            ]
-        ];
-        $app=$this;
+        $configuration = require __DIR__ . '/config.php';
+
+        if (file_exists($this->getConfigurationDir() . '/services.' . $this->getEnvironment() . '.php')) {
+            $configuration['settings'] += require $this->getConfigurationDir() . '/services.' . $this->getEnvironment() . '.php';
+        } else {
+            $configuration['settings'] += require $this->getConfigurationDir() . '/services.php';
+        }
+
+        $app = $this;
         $env = new \Leven\Helpers\Env();
 
         /*Dynamic containers in services*/
-        $config_dir = scandir($this->rootDir.'/config/');
+        $config_dir = scandir($this->rootDir . '/config/');
         $ex_config_folders = array('..', '.');
-        $filesInConfig =  array_diff($config_dir,$ex_config_folders);
+        $filesInConfig = array_diff($config_dir, $ex_config_folders);
         if (!isset($configs)) {
             $configs = array();
         }
-        $i=0;
-        foreach($filesInConfig as $config_file){
-             $file[$i] = include_once  $this->rootDir.'/config/'.$config_file;
-            if(is_array($file[$i])){
+        $i = 0;
+        foreach ($filesInConfig as $config_file) {
+            $file[$i] = include_once $this->rootDir . '/config/' . $config_file;
+            if (is_array($file[$i])) {
                 $configs = array_merge($configs, $file[$i]);
                 $i++;
             }
-
         }
-
-        $configuration["definitions"]['settings'] = $configs;
+        $configuration['settings'] += $configs;
 
 
         return $configuration;
@@ -143,30 +139,26 @@ class Application extends App
     {
         $app = $this;
         $container = $this->getContainer();
-        require $this->getRootDir() . '/leven/middlewares.php';
+
+
+        require $this->getBootstrap() . '/middleware.php';
     }
 
     protected function loadRoutes()
     {
         $app = $this;
         $container = $this->getContainer();
-//        require $this->getConfigurationDir() . '/apiRoute.php';
-//        require $this->getConfigurationDir() . '/webRoutes.php';
-
         $route = new Route($app);
-
-        $files =  getDirFiles($this->rootDir.'/app/Routes/');
+        $files = getDirFiles($this->rootDir . '/app/Routes/');
         /** Route Partial Loadup =================================================== */
         foreach ($files as $partial) {
-            $file = $this->rootDir.'/app/Routes/'.$partial;
+            $file = $this->rootDir . '/app/Routes/' . $partial;
             $filse[] = $file;
-            if ( ! file_exists($file))
-            {
+            if (!file_exists($file)) {
                 $msg = "Route partial [{$partial}] not found.";
             }
             include $file;
         }
-
     }
 
     protected function registerControllers($container)
@@ -180,9 +172,9 @@ class Application extends App
         }
     }
 
-    protected function registerHandlers()
+    protected function registerHandlers($container)
     {
-        $container = $this->getContainer();
+
         require $this->getBootstrap() . '/handlers.php';
     }
 }

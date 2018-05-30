@@ -46,14 +46,20 @@ class ContainerBuilder
             require __DIR__ . '/definitions.php',
             [Configuration::class => $configuration]
         );
+
         $containerBuilder->addDefinitions($defaultDefinitions);
+
+
 
         // Custom definitions
         foreach (self::parseDefinitions($configuration->getDefinitions()) as $definitions) {
+
             $containerBuilder->addDefinitions($definitions);
         }
 
         $container = $containerBuilder->build();
+
+        //dump($container->get("settings"));
 
         // Add container itself
         $container->set(ContainerInterface::class, $container);

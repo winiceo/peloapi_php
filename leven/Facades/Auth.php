@@ -1,23 +1,22 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: afshin
- * Date: 11/24/17
- * Time: 1:08 PM
+ * User: zhangshize
+ * Date: 2016/12/30
+ * Time: 下午 3:34
  */
 
 namespace Leven\Facades;
 
-use Leven\Services\AuthService;
-use SlimFacades\Facade;
+/**
+ * Class View
+ * If you want to use this facades, you should set a 'view' service in the
+ * container.
+ * @package Leven
+ */
 class Auth extends Facade
 {
-    /**
-     * @param Core\Services\AuthService\AuthService
-     * @return AuthService
-    */
     protected static function getFacadeAccessor()
     {
-        return 'AuthService';
+        return 'auth';
     }
 }

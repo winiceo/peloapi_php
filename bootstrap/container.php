@@ -11,16 +11,13 @@ use Slim\Csrf\Guard;
 use Slim\Flash\Messages;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use Awurth\SlimValidation\Validator;
 
 use Psr\Container\ContainerInterface;
 
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\Loader\PhpFileLoader;
-use Symfony\Component\Translation\MessageSelector;
-use Monolog\Formatter\JsonFormatter;
+ use Monolog\Formatter\JsonFormatter;
 
 $config = C();
-
 
 
 $capsule = new Manager();
@@ -35,17 +32,11 @@ $container["jwt"] = function ($container) {
 };
 $container["config"] = function () {
     $config = [];
-    $config['constants'] = ['ORDER_STATUS' => [
-        "CREATED" => 0,
-        "PAY" => 1,
-        "RELEASE" => 2,
-        "COMMENT" => 3,
-        "COMPLAINT" => 4,
-        "CANCEL" => 8,
-        "FINISH" => 9,
-
-    ]];
-   // return new Illuminate\Config\Repository($config);
+    $config['ORDER_TYPE'] = [
+            "INCOME" => 1,
+            "WITHDRAW" => 2
+    ];
+   return $config;
 };
 
 $container['auth'] = function (ContainerInterface $c) {
@@ -69,14 +60,14 @@ $container['validator'] = function () {
     return new Validator();
 };
 
-$container['translator'] = function (ContainerInterface $container) {
+$container['translator'] = function (ContainerInterface $c) {
 
 
-    $translator = new Translator("zh_CN", new MessageSelector());
+    $translator = new \Symfony\Component\Translation\Translator("zh_CN");
 // Set a fallback language incase you don't have a translation in the default language
     $translator->setFallbackLocales(['zh_CN']);
 // Add a loader that will get the php files we are going to store our translations in
-    $translator->addLoader('php', new PhpFileLoader());
+    $translator->addLoader('php', new \Symfony\Component\Translation\Loader\PhpFileLoader());
 // Add language files here
     $translator->addResource('php', C('root') . '/translations/zh_cn/message.php', 'zh_CN'); // Norwegian
 
@@ -84,6 +75,8 @@ $container['translator'] = function (ContainerInterface $container) {
     return $translator;
 
 };
+
+
 
 $container['logger'] = function (ContainerInterface $c) {
     $config = $c->get('settings')['monolog'];

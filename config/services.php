@@ -2,7 +2,7 @@
 
 return [
 
-    'sentinel' => require C('root').'/config/sentinel.php',
+    'sentinel' => require __DIR__.'/sentinel.php',
 
     'eloquent' => [
         'driver'    => $_SERVER['APP_DATABASE_DRIVER'],

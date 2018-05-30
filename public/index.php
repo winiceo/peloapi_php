@@ -2,6 +2,10 @@
 
 use Symfony\Component\Dotenv\Dotenv;
 
+
+ignore_user_abort(TRUE);
+set_time_limit(0);
+//error_reporting(-1);
 header('Content-type: text/html;charset=utf-8');
 
 session_start();
@@ -36,13 +40,11 @@ function C($key = NULL, $value = NULL)
     return isset($_config[$key]) ? $_config[$key] : NULL;
 }
 
-use SlimFacades\Facade;
 
 
 $app = new \Leven\Application($_SERVER['APP_ENV'] ?? 'dev');
 
-$container = $app->getContainer();
-
-Facade::setFacadeApplication($app);
+//$container = $app->getContainer();
+\Leven\Facades\Facade::setFacadeApplication($app);
 
 $app->run();

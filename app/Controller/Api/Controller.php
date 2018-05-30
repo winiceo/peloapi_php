@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Exception\AccessDeniedException;
 use App\Exception\ServerError;
 
+use Leven\Facades\Log;
 use Psr\Container\ContainerInterface;
 
 use Monolog\Logger;
@@ -125,12 +126,12 @@ abstract class Controller
     protected function success( )
     {
 
-        return \Core\Facades\Response::withJson($this->formatResponse(), 200);
+        return \Leven\Facades\Response::withJson($this->formatResponse(), 200);
     }
     protected function toJson( )
     {
 
-        return \Core\Facades\Response::withJson($this->formatResponse(), 200);
+        return \Leven\Facades\Response::withJson($this->formatResponse(), 200);
     }
 
 
@@ -143,7 +144,7 @@ abstract class Controller
     public function error($message)
     {
         $this->validator->addError('error',$message);
-        Log::error($message);
+        //Log::error($message);
         throw new ServerError($message,400);
      }
 

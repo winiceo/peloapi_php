@@ -19,7 +19,7 @@ class FlashMessageMiddleWare extends _Middleware
     {
 //        $response->getBody()->write('BEFORE');
 //
-        $messages = $this->flash->getMessages();
+        //$messages = $this->flash->getMessages();
 
 
 

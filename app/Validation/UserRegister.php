@@ -6,9 +6,10 @@
  * Time: 上午12:06
  */
 
-namespace App\Validator;
+namespace App\Validation;
 
-use Leven\Lang;
+
+use Leven\Facades\Lang;
 use Slim\Http\Request;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Validation;
@@ -26,7 +27,7 @@ trait UserRegister
 
         $validator = Validation::createValidator();
         $username = $request->getParam('username');
-        $email = $request->getParam('email');
+        $mobile = $request->getParam('mobile');
         $password = $request->getParam('password');
 
         $violations = [];
@@ -39,7 +40,10 @@ trait UserRegister
 
         ));
 
-        $violations[] = $validator->validate($email, new Assert\Email(array('message' => '邮箱不正确')));
+        $violations[] = $validator->validate($mobile, array(
+            new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '手机号')))),
+
+        ));
         $violations[] = $validator->validate($password, array(
                 new Assert\Length(array('min' => 6, 'max' => 25,
                     'exactMessage' => '密码长度为6-25',
@@ -49,29 +53,87 @@ trait UserRegister
                 new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '密码')))),
             )
         );
+
+        $ret = [];
+        if (0 !== count($violations)) {
+            // there are errors, now you can show them
+            foreach ($violations as $violation) {
+                foreach ($violation as $error) {
+                    $ret[] = $error;
+                }
+
+            }
+        }
 //
-//        $constraint = new Assert\Collection(array(
-//            // the keys correspond to the keys in the input array
-//            'username' => array(
-//                new Assert\Length(array(
-//                    'max' => 25,
-//                    'maxMessage' => $this->translator->trans('max %name%', array('%name%' => 25)))),
-//                new Assert\NotBlank(array('message' => $this->translator->trans('%name% not blank', array('%name%' => '名称')))),
+
+
+        return $ret;
+    }
+
+    function forgetInputCheck(Request $request)
+    {
+
+        $validator = Validation::createValidator();
+        $mobile = $request->getParam('mobile');
+        $password = $request->getParam('password');
+
+        $violations = [];
+
+
+        $violations[] = $validator->validate($mobile, array(
+            new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '手机号')))),
+
+        ));
+        $violations[] = $validator->validate($password, array(
+                new Assert\Length(array('min' => 6, 'max' => 25,
+                    'exactMessage' => '密码长度为6-25',
+                    'minMessage' => '密码最小长度为6',
+                    'maxMessage' => '密码最大长度为25'
+                )),
+                new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '密码')))),
+            )
+        );
+
+        $ret = [];
+        if (0 !== count($violations)) {
+            // there are errors, now you can show them
+            foreach ($violations as $violation) {
+                foreach ($violation as $error) {
+                    $ret[] = $error;
+                }
+
+            }
+        }
 //
-//            ),
-//            'email' => new Assert\Email(array('message' => '邮箱不正确')),
-//            'password' => array(
-//                new Assert\Length(array('min' => 6, 'max' => 25,
-//                    'exactMessage' => '密码长度为6-25',
-//                    'minMessage' => '最小长度为6',
-//                    'maxMessage' => '最大长度为25'
-//                )),
-//                new Assert\NotBlank(array('message' => $this->translator->trans('%name% not blank', array('%name%' => '密码')))),
-//            )
-//
-//
-//        ));
-        // $violations = $validator->validate($request->getParams(), $constraint);
+
+
+        return $ret;
+    }
+
+    function UpdatePasswordInputCheck(Request $request)
+    {
+
+        $validator = Validation::createValidator();
+        $mobile = $request->getParam('mobile');
+        $password = $request->getParam('password');
+        $old_password = $request->getParam('old_password');
+
+        $violations = [];
+
+
+        $violations[] = $validator->validate($old_password, array(
+            new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '旧密码')))),
+
+        ));
+        $violations[] = $validator->validate($password, array(
+                new Assert\Length(array('min' => 6, 'max' => 25,
+                    'exactMessage' => '密码长度为6-25',
+                    'minMessage' => '密码最小长度为6',
+                    'maxMessage' => '密码最大长度为25'
+                )),
+                new Assert\NotBlank(array('message' => Lang::trans('%name% not blank', array('%name%' => '密码')))),
+            )
+        );
 
         $ret = [];
         if (0 !== count($violations)) {

@@ -26,7 +26,7 @@ class CoinType extends Model
      * @var array
      */
     protected $fillable = [
-        'label', 'name'
+        'name', 'symbol','decimals','withdraw_enable','fee'
     ];
 
 }

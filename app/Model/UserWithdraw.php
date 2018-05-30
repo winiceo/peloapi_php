@@ -18,9 +18,10 @@ use models;
 class UserWithdraw extends Model
 {
     // Attributes.
-     protected $table = 'user_withdraw';
+    protected $table = 'withdraw';
+
     protected $fillable = [
-        'id', 'user_id', 'coin_type', 'address', 'amount', 'order_code', 'finish_time', 'status', 'created_at', 'updated_at'
+        'id', 'user_id', 'coin_id', 'address', 'amount', 'order_code', 'finish_time', 'status', 'created_at', 'updated_at'
     ];
     protected $guarded = [];
 
