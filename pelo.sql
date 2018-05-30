@@ -11,7 +11,7 @@
  Target Server Version : 100307
  File Encoding         : 65001
 
- Date: 29/05/2018 17:25:30
+ Date: 30/05/2018 13:55:11
 */
 
 SET NAMES utf8mb4;
@@ -35,13 +35,6 @@ CREATE TABLE `activations` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of activations
--- ----------------------------
-BEGIN;
-INSERT INTO `activations` VALUES (1, 1, 's4u7l9pfNGuFDTHWWwGINAC8X4MBntMr', 1, '2018-05-29 08:14:16', '2018-05-29 08:14:16', '2018-05-29 08:14:16');
-COMMIT;
-
--- ----------------------------
 -- Table structure for assets
 -- ----------------------------
 DROP TABLE IF EXISTS `assets`;
@@ -54,14 +47,6 @@ CREATE TABLE `assets` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of assets
--- ----------------------------
-BEGIN;
-INSERT INTO `assets` VALUES (1, 1, 1, 98335, '2017-12-13 16:27:15', '2018-05-29 09:10:28');
-INSERT INTO `assets` VALUES (2, 1, 2, 2000000, '2017-12-13 16:27:15', '2017-12-13 16:27:15');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for categories
@@ -101,32 +86,12 @@ CREATE TABLE `coin_type` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of coin_type
--- ----------------------------
-BEGIN;
-INSERT INTO `coin_type` VALUES (1, '菠萝', 'Pelo', 18, 1, 10);
-INSERT INTO `coin_type` VALUES (2, '菠菜', 'Boc', 18, 0, 2);
-COMMIT;
-
--- ----------------------------
 -- Table structure for migrations
 -- ----------------------------
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of migrations
--- ----------------------------
-BEGIN;
-INSERT INTO `migrations` VALUES ('20171117135548');
-INSERT INTO `migrations` VALUES ('20171117140509');
-INSERT INTO `migrations` VALUES ('20171120151128');
-INSERT INTO `migrations` VALUES ('20171130091220');
-INSERT INTO `migrations` VALUES ('20171228211415');
-INSERT INTO `migrations` VALUES ('20180101083658');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for order
@@ -147,7 +112,7 @@ CREATE TABLE `order` (
   `txid` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `type` tinyint(1) DEFAULT 0 COMMENT '1为收入;2为提现',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for permission_role
@@ -192,13 +157,6 @@ CREATE TABLE `persistences` (
   KEY `persistences_user_id_foreign` (`user_id`),
   CONSTRAINT `persistences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of persistences
--- ----------------------------
-BEGIN;
-INSERT INTO `persistences` VALUES (1, 1, 'qvK5Fj9TMsDJWF1OO3T5gl1sYRHOgiUJ', '2018-05-29 08:14:20', '2018-05-29 08:14:20');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for role_user
@@ -280,13 +238,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of user
--- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES (1, 'admin', NULL, '18028721507', '$2y$10$ZIp2DodMwLZ4hQ54c0Aoj.ayqWAEmU1WxuZ2ggsJbZhVV3ypYezRO', NULL, NULL, '{\"user.delete\":0}', '2018-05-29 08:14:20', '2018-05-29 08:14:16', '2018-05-29 08:14:20');
-COMMIT;
-
--- ----------------------------
 -- Table structure for user_balances
 -- ----------------------------
 DROP TABLE IF EXISTS `user_balances`;
@@ -302,14 +253,6 @@ CREATE TABLE `user_balances` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of user_balances
--- ----------------------------
-BEGIN;
-INSERT INTO `user_balances` VALUES (1, 1, 1, 'BTC', 702402, 0, 2122823, '2017-12-13 16:27:15', '2017-12-15 08:40:37');
-INSERT INTO `user_balances` VALUES (2, 1, 2, 'ETH', 0, 0, 123123123, '2017-12-13 16:27:15', '2017-12-13 16:27:15');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user_orders
@@ -353,34 +296,3 @@ CREATE TABLE `user_wallet` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------
--- Records of user_wallet
--- ----------------------------
-BEGIN;
-INSERT INTO `user_wallet` VALUES (1, 2, '1', '我的钱包', 'abdfadfasdfadf33', '2017-12-13 13:48:36', '2017-12-13 13:48:36', 0, NULL);
-COMMIT;
-
--- ----------------------------
--- Table structure for users1
--- ----------------------------
-DROP TABLE IF EXISTS `users1`;
-CREATE TABLE `users1` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mobile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `api_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `has_pic` enum('no','yes') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_mobile_unique` (`mobile`),
-  UNIQUE KEY `users_username_unique` (`username`),
-  UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-SET FOREIGN_KEY_CHECKS = 1;

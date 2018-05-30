@@ -1,12 +1,14 @@
 <?php
 
+
 use Symfony\Component\Dotenv\Dotenv;
 
 
 ignore_user_abort(TRUE);
 set_time_limit(0);
-//error_reporting(-1);
+error_reporting(-1);
 header('Content-type: text/html;charset=utf-8');
+
 
 session_start();
 define('__APP_ROOT__',__DIR__ . '/../') ;
